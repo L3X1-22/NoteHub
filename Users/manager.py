@@ -22,7 +22,6 @@ class user:
         passh = passh.hexdigest()
 
         #Data and sql query for new user
-
         newUser = (self.name, self.lastName, self.email, passh, datetime.date.today())
         sql = "INSERT INTO users VALUES(null, %s, %s, %s, %s, %s)"
 
