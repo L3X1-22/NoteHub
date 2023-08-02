@@ -1,9 +1,8 @@
 import DB.cnx as cnx
 
-def prep():
-    
-    cursor = cnx.cursor
+cursor = cnx.cursor
 
+def prep():    
     cursor.execute("""
 
     CREATE DATABASE IF NOT EXISTS notehub;
@@ -30,3 +29,6 @@ def prep():
     );
 
     """)
+
+def use_DB():
+    cursor.execute('use notehub;')
