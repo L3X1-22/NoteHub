@@ -7,12 +7,11 @@ class notes():
 
     def readNotes(self):
 
-        #data and sql code for query
-        sql = "SELECT * FROM notes WHERE userID = %s"
-        data = (self.userID)
+        #sql code for query
+        sql = f"SELECT * FROM notes WHERE userID = {self.userID}"
 
         prep.use_DB()
-        cnx.cursor.execute(sql, data)
+        cnx.cursor.execute(sql)
         print (cnx.cursor.fetchall())
         return None
     
