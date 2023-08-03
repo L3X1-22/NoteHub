@@ -1,5 +1,4 @@
 import DB.cnx as cnx
-import DB.prep as prep
 import datetime
 import hashlib
 
@@ -31,7 +30,6 @@ class user:
         sql = "INSERT INTO users VALUES(null, %s, %s, %s, %s, %s)"
 
         #Add user to DB
-        prep.use_DB()
         cnx.cursor.execute(sql, newUser)
         cnx.cnx.commit()
 
@@ -47,7 +45,6 @@ class user:
         sql = "SELECT * FROM users WHERE email = %s AND password = %s"
 
         #Search user in DB
-        prep.use_DB()
         cnx.cursor.execute(sql, searchUser)
         result = cnx.cursor.fetchone()
         

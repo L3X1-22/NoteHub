@@ -1,5 +1,4 @@
 import DB.cnx as cnx
-import DB.prep as prep
 
 class notes():
     def __init__(self, userID):
@@ -11,7 +10,6 @@ class notes():
         sql = f"SELECT * FROM notes WHERE userID = {self.userID}"
 
         #execute sql query
-        prep.use_DB()
         cnx.cursor.execute(sql)
         print (cnx.cursor.fetchall())
 
@@ -24,7 +22,6 @@ class notes():
         data = (title, body, self.userID)
 
         #execute sql query
-        prep.use_DB()
         cnx.cursor.execute(sql, data)
         cnx.cnx.commit()
 
@@ -36,7 +33,6 @@ class notes():
         sql =   f"DELETE FROM notes WHERE ID = {note} AND userID = {self.userID};"
 
         #execute sql query
-        prep.use_DB()
         cnx.cursor.execute(sql)
         cnx.cnx.commit()
         return None
