@@ -1,5 +1,34 @@
 import mysql.connector
-import DB.prep as prep
+
+#this function creates the database
+def prep():    
+    cursor.execute("""
+
+    CREATE DATABASE IF NOT EXISTS notehub;
+
+    use notehub;
+                     
+    CREATE TABLE IF NOT EXISTS users(             
+        ID int auto_increment NOT NULL,
+        name varchar(255) NOT NULL,
+        lastName varchar(255) NOT NULL,
+        email varchar(255),
+        password varchar(255),
+        userDate date,
+        PRIMARY KEY(ID),
+        UNIQUE (email)
+    );
+        
+    CREATE TABLE IF NOT EXISTS notes(
+        ID int auto_increment NOT NULL,
+        title varchar(255) NOT NULL,
+        body varchar(255) NOT NULL,
+        userID int,
+        PRIMARY KEY(ID),
+        FOREIGN KEY(userID) REFERENCES users(ID)
+    );
+
+    """)
 
 #attempt to connect to a database
 try:
@@ -21,7 +50,8 @@ except mysql.connector.errors.ProgrammingError:
     buffered = True,
     )
     #create database
-    prep.prep()
+    cursor = cnx.cursor()
+    prep()
     cnx.close()
 
     #connect to database created previously
