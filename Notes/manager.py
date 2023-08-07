@@ -41,5 +41,16 @@ class notes():
         cnx.cnx.commit()
         return None
     
-    def modNotes(self):
+    def modNotes(self, noteID, isTitle, userInput):
+        #sql code and data for query
+        if isTitle:
+            sql = "UPDATE notes SET title = %s where ID = %s"
+        else:
+            sql = "UPDATE notes SET body = %s where ID = %s"
+        data = (userInput, noteID)
+
+        #execute sql query
+        prep.use_DB()
+        cnx.cursor.execute(sql, data)
+        cnx.cnx.commit()
         return None
