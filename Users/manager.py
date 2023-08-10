@@ -1,3 +1,4 @@
+import mysql.connector
 import DB.cnx as cnx
 import datetime
 import hashlib
@@ -30,8 +31,11 @@ class user:
         sql = "INSERT INTO users VALUES(null, %s, %s, %s, %s, %s)"
 
         #Add user to DB
-        cnx.cursor.execute(sql, newUser)
-        cnx.cnx.commit()
+        try:
+            cnx.cursor.execute(sql, newUser)
+            cnx.cnx.commit()
+        except mysql.connector.errors.IntegrityError:
+            print("couldn't register, email already exists")
 
 
     #this function allows users to login into their accounts
@@ -45,7 +49,9 @@ class user:
         sql = "SELECT * FROM users WHERE email = %s AND password = %s"
 
         #Search user in DB
-        cnx.cursor.execute(sql, searchUser)
-        result = cnx.cursor.fetchone()
-        
+        try:
+            cnx.cursor.execute(sql, searchUser)
+            result = cnx.cursor.fetchone()
+        except TypeError:
+            print("wrong email or password")
         return result[1]
