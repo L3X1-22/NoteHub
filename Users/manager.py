@@ -19,6 +19,12 @@ class user:
         passh.update(password)
         self.password = passh.hexdigest()
 
+    def searchUser(self):
+        #Data and sql query for searching the user
+        data = (self.email, self.password)
+        sql = "SELECT * FROM users WHERE email = %s AND password = %s"
+
+        return (sql, data)
 
     #this function register new users into the DB
     def register(self):
@@ -34,6 +40,10 @@ class user:
         try:
             cnx.cursor.execute(sql, newUser)
             cnx.cnx.commit()
+            searchUser = self.searchUser()
+            cnx.cursor.execute(searchUser[0], searchUser[1])
+            result = cnx.cursor.fetchone()
+            return result[0]
         except mysql.connector.errors.IntegrityError:
             print("couldn't register, email already exists")
 
@@ -42,16 +52,14 @@ class user:
     def login(self):
 
         #create hash for the password
-        self.hash_password()
+        self.hash_password()     
 
-        #Data and sql query for searching the user
-        searchUser = (self.email, self.password)
-        sql = "SELECT * FROM users WHERE email = %s AND password = %s"
+        searchUser = self.searchUser()
 
         #Search user in DB
         try:
-            cnx.cursor.execute(sql, searchUser)
+            cnx.cursor.execute(searchUser[0], searchUser[1])
             result = cnx.cursor.fetchone()
+            return result[0]
         except TypeError:
-            print("wrong email or password")
-        return result[1]
+            print("wrong email or password")        

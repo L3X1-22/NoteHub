@@ -11,9 +11,8 @@ class notes():
 
         #execute sql query
         cnx.cursor.execute(sql)
-        print (cnx.cursor.fetchall())
 
-        return None
+        return cnx.cursor.fetchall()
     
     def addNotes(self, title, body):
 
@@ -25,27 +24,34 @@ class notes():
         cnx.cursor.execute(sql, data)
         cnx.cnx.commit()
 
-        return None
+        return 'Note added succesfully!'
 
     def delNotes(self, note):
 
         #sql code and data for query
-        sql =   f"DELETE FROM notes WHERE ID = {note} AND userID = {self.userID};"
+        sql =   f"DELETE FROM notes WHERE title = '{note}' AND userID = {self.userID};"
 
         #execute sql query
         cnx.cursor.execute(sql)
         cnx.cnx.commit()
-        return None
+        if cnx.cursor.rowcount == 0:
+            self.delNotes(input('\nWrite correctly the title of the note that you want to delete please!!\n\nNote title:\n'))
+        if cnx.cursor.rowcount == 0:
+            return 'Note deleted'
     
-    def modNotes(self, noteID, isTitle, userInput):
+    def modNotes(self, isTitle, title, userInput):
         #sql code and data for query
         if isTitle:
-            sql = "UPDATE notes SET title = %s where ID = %s"
+            sql = "UPDATE notes SET title = %s where userID = %s and title = %s"
         else:
-            sql = "UPDATE notes SET body = %s where ID = %s"
-        data = (userInput, noteID)
+            sql = "UPDATE notes SET body = %s where userID = %s and title = %s"
+        data = (userInput, self.userID, title)
 
         #execute sql query
         cnx.cursor.execute(sql, data)
         cnx.cnx.commit()
-        return None
+        if cnx.cursor.rowcount == 0:
+            print('Wrong title!!! if you have troubles writing it please copy and paste the title')
+            self.modNotes(isTitle, input('\nPlease write the note title:\n'), userInput)
+        if cnx.cursor.rowcount >=1:
+            return 'Note modified succesfully!!!'
